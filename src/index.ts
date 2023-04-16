@@ -2,18 +2,26 @@ import express from "express";
 import { config } from "dotenv";
 import { MongoGetWordsRepository } from "./repositories/get-words/mongo-get-words";
 import { GetWordsController } from "./controllers/get-words/get-words";
+import { MongoClient } from "./database/mongo";
 
-config();
-const app = express();
-const port = process.env.PORT || 8000;
+const main = async () => {
+  config();
 
-app.get("/words", async (req, res) => {
-  const mongoGetWordsRepository = new MongoGetWordsRepository();
-  const getWordsController = new GetWordsController(mongoGetWordsRepository);
+  const app = express();
+  await MongoClient.connect();
 
-  const { body, statusCode } = await getWordsController.handle();
+  app.get("/words", async (req, res) => {
+    const mongoGetWordsRepository = new MongoGetWordsRepository();
+    const getWordsController = new GetWordsController(mongoGetWordsRepository);
 
-  res.status(statusCode).send(body);
-});
+    const { body, statusCode } = await getWordsController.handle();
 
-app.listen(port, () => console.log(`listening on port ${port}!`));
+    res.status(statusCode).send(body);
+  });
+
+  const port = process.env.PORT || 8000;
+
+  app.listen(port, () => console.log(`listening on port ${port}!`));
+};
+
+main();

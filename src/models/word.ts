@@ -1,8 +1,10 @@
 export interface Word {
   word: string;
   definition: string;
-  examples: [];
-  synonyms: [];
-  antonyms: [];
-  translations: [];
+  examples: string[];
+  synonyms?: string[];
+  antonyms?: string[];
+  translations: {
+    [key: string]: string;
+  };
 }
