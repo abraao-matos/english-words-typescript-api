@@ -11,6 +11,7 @@ export class GetWordsController implements IGetWordsController {
         body: words,
       };
     } catch (error) {
+      console.log(error);
       return {
         statusCode: 500,
         body: "Something went wrong.",
