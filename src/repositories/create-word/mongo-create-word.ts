@@ -1,4 +1,3 @@
-import { userInfo } from "os";
 import {
   CreateWordParams,
   ICreateWordRepository,
@@ -6,7 +5,7 @@ import {
 import { MongoClient } from "../../database/mongo";
 import { Word } from "../../models/word";
 
-export class MongoCreateWord implements ICreateWordRepository {
+export class MongoCreateWordRepository implements ICreateWordRepository {
   async createWord(params: CreateWordParams): Promise<Word> {
     const { insertedId } = await MongoClient.db
       .collection("words")
@@ -20,6 +19,13 @@ export class MongoCreateWord implements ICreateWordRepository {
       throw new Error("Word not created");
     }
 
+    return word;
+  }
+
+  async findWordByName(name: string): Promise<Word | null> {
+    const word = await MongoClient.db
+      .collection<Word>("words")
+      .findOne({ word: name });
     return word;
   }
 }
