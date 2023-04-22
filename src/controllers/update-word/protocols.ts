@@ -1,4 +1,5 @@
 import { Word } from "../../models/word";
+import { HttpRequest, HttpResponse } from "../protocols";
 
 export interface updateUserParams {
   word?: string;
@@ -8,6 +9,10 @@ export interface updateUserParams {
   translations?: {
     [key: string]: string;
   };
+}
+
+export interface IUpdateWordController {
+  handle(httpRequest: HttpRequest<any>): Promise<HttpResponse<Word>>;
 }
 
 export interface IUpdateWordRepository {

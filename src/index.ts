@@ -5,6 +5,8 @@ import { GetWordsController } from "./controllers/get-words/get-words";
 import { MongoClient } from "./database/mongo";
 import { MongoCreateWordRepository } from "./repositories/create-word/mongo-create-word";
 import { CreateWordController } from "./controllers/create-word/create-word";
+import { MongoUpdateWordRepository } from "./repositories/update-word/mongo-update-word";
+import { UpdateWordController } from "./controllers/update-word/update-word";
 
 const main = async () => {
   config();
@@ -31,6 +33,20 @@ const main = async () => {
 
     const { body, statusCode } = await createWordController.handle({
       body: req.body,
+    });
+
+    res.status(statusCode).send(body);
+  });
+
+  app.patch("/words/:word", async (req, res) => {
+    const mongoUpdateWordRepository = new MongoUpdateWordRepository();
+    const updateWordController = new UpdateWordController(
+      mongoUpdateWordRepository
+    );
+
+    const { body, statusCode } = await updateWordController.handle({
+      body: req.body,
+      params: req.params,
     });
 
     res.status(statusCode).send(body);
