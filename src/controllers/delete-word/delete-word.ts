@@ -1,8 +1,8 @@
 import { Word } from "../../models/word";
-import { HttpRequest, HttpResponse } from "../protocols";
-import { IDeleteWordController, IDeleteWordRepository } from "./protocols";
+import { HttpRequest, HttpResponse, IController } from "../protocols";
+import { IDeleteWordRepository } from "./protocols";
 
-export class DeleteWordController implements IDeleteWordController {
+export class DeleteWordController implements IController {
   constructor(private readonly deleteWordRepository: IDeleteWordRepository) {}
 
   async handle(httpRequest: HttpRequest<any>): Promise<HttpResponse<Word>> {

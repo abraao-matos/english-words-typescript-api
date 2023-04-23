@@ -1,8 +1,8 @@
 import { Word } from "../../models/word";
-import { HttpRequest, HttpResponse } from "../protocols";
-import { IFindWordController, IFindWordRepository } from "./protocols";
+import { HttpRequest, HttpResponse, IController } from "../protocols";
+import { IFindWordRepository } from "./protocols";
 
-export class FindWordController implements IFindWordController {
+export class FindWordController implements IController {
   constructor(private readonly findWordRepository: IFindWordRepository) {}
 
   async handle(httpRequest: HttpRequest<any>): Promise<HttpResponse<Word>> {

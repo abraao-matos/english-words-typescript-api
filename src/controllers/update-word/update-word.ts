@@ -1,18 +1,27 @@
 import { Word } from "../../models/word";
-import { HttpRequest, HttpResponse } from "../protocols";
-import { IUpdateWordController, IUpdateWordRepository } from "./protocols";
+import { HttpRequest, HttpResponse, IController } from "../protocols";
+import { IUpdateWordRepository, UpdateUserParams } from "./protocols";
 
-export class UpdateWordController implements IUpdateWordController {
+export class UpdateWordController implements IController {
   constructor(private readonly updateWordRepository: IUpdateWordRepository) {}
-  async handle(httpRequest: HttpRequest<any>): Promise<HttpResponse<Word>> {
+  async handle(
+    httpRequest: HttpRequest<UpdateUserParams>
+  ): Promise<HttpResponse<Word>> {
     try {
       const wordName = httpRequest?.params?.word;
       const body = httpRequest?.body;
 
+      if (!body) {
+        return {
+          statusCode: 400,
+          body: "Missing fields",
+        };
+      }
+
       if (!wordName) {
         return {
           statusCode: 400,
-          body: "Missing word name",
+          body: "Missing word",
         };
       }
 

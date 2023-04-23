@@ -1,12 +1,8 @@
 import { Word } from "../../models/word";
-import { HttpRequest, HttpResponse } from "../protocols";
-import {
-  CreateWordParams,
-  ICreateWordController,
-  ICreateWordRepository,
-} from "./protocols";
+import { HttpRequest, HttpResponse, IController } from "../protocols";
+import { CreateWordParams, ICreateWordRepository } from "./protocols";
 
-export class CreateWordController implements ICreateWordController {
+export class CreateWordController implements IController {
   constructor(private readonly createWordRepository: ICreateWordRepository) {}
 
   async handle(
