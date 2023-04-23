@@ -1,4 +1,5 @@
 import { Word } from "../../models/word";
+import { badRequest, ok, serverError } from "../helpers";
 import { HttpRequest, HttpResponse, IController } from "../protocols";
 import { IUpdateWordRepository, UpdateUserParams } from "./protocols";
 
@@ -6,36 +7,24 @@ export class UpdateWordController implements IController {
   constructor(private readonly updateWordRepository: IUpdateWordRepository) {}
   async handle(
     httpRequest: HttpRequest<UpdateUserParams>
-  ): Promise<HttpResponse<Word>> {
+  ): Promise<HttpResponse<Word | string>> {
     try {
       const wordName = httpRequest?.params?.word;
       const body = httpRequest?.body;
 
       if (!body) {
-        return {
-          statusCode: 400,
-          body: "Missing fields",
-        };
+        return badRequest("Missing fields");
       }
 
       if (!wordName) {
-        return {
-          statusCode: 400,
-          body: "Missing word",
-        };
+        return badRequest("Missing word");
       }
 
       const word = await this.updateWordRepository.updateWord(wordName, body);
 
-      return {
-        statusCode: 200,
-        body: word,
-      };
+      return ok<Word>(word);
     } catch (error) {
-      return {
-        statusCode: 500,
-        body: "Something went wrong",
-      };
+      return serverError();
     }
   }
 }

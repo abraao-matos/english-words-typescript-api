@@ -1,22 +1,17 @@
-import { IController } from "../protocols";
+import { Word } from "../../models/word";
+import { ok, serverError } from "../helpers";
+import { HttpResponse, IController } from "../protocols";
 import { IGetWordsRepository } from "./protocols";
 
 export class GetWordsController implements IController {
   constructor(private readonly getWordsRepository: IGetWordsRepository) {}
-  async handle() {
+  async handle(): Promise<HttpResponse<Word[] | string>> {
     try {
       const words = await this.getWordsRepository.getWords();
 
-      return {
-        statusCode: 200,
-        body: words,
-      };
+      return ok<Word[]>(words);
     } catch (error) {
-      console.log(error);
-      return {
-        statusCode: 500,
-        body: "Something went wrong.",
-      };
+      return serverError();
     }
   }
 }

@@ -1,4 +1,5 @@
 import { Word } from "../../models/word";
+import { badRequest, conflict, created, serverError } from "../helpers";
 import { HttpRequest, HttpResponse, IController } from "../protocols";
 import { CreateWordParams, ICreateWordRepository } from "./protocols";
 
@@ -7,16 +8,13 @@ export class CreateWordController implements IController {
 
   async handle(
     httpRequest: HttpRequest<CreateWordParams>
-  ): Promise<HttpResponse<Word>> {
+  ): Promise<HttpResponse<Word | string>> {
     try {
       const requiredFields = ["word", "definition", "examples"];
 
       for (const field of requiredFields) {
         if (!httpRequest?.body?.[field as keyof CreateWordParams]?.length) {
-          return {
-            statusCode: 400,
-            body: `Field ${field} as required`,
-          };
+          return badRequest(`Field ${field} as required`);
         }
       }
 
@@ -24,25 +22,16 @@ export class CreateWordController implements IController {
       const existingWord = await this.createWordRepository.findWordByName(word);
 
       if (existingWord) {
-        return {
-          statusCode: 409,
-          body: `Word '${word}' already exists`,
-        };
+        return conflict(`Word '${word}' already exists`);
       }
 
       const createdWord = await this.createWordRepository.createWord(
         httpRequest.body!
       );
 
-      return {
-        statusCode: 201,
-        body: createdWord,
-      };
+      return created<Word>(createdWord);
     } catch (error) {
-      return {
-        statusCode: 500,
-        body: "something went wrong",
-      };
+      return serverError();
     }
   }
 }

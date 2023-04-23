@@ -1,12 +1,12 @@
 import {
   IUpdateWordRepository,
-  updateUserParams,
+  UpdateUserParams,
 } from "../../controllers/update-word/protocols";
 import { MongoClient } from "../../database/mongo";
 import { Word } from "../../models/word";
 
 export class MongoUpdateWordRepository implements IUpdateWordRepository {
-  async updateWord(name: string, params: updateUserParams): Promise<Word> {
+  async updateWord(name: string, params: UpdateUserParams): Promise<Word> {
     await MongoClient.db.collection("words").updateOne(
       { word: name },
       {
