@@ -42,7 +42,7 @@ Essa API é um dicionário de palavras que fornece informações sobre as defini
 
 ## Rotas
 
-- GET /words - retorna as palavras salvos no banco
+- GET /words - retorna as palavras salvas no banco
 - GET /words/:word - retorna a palavra especificada salva no banco
 - POST /words - cria uma palavra
 - PATCH /words/:word - atualiza a palavra especificada
